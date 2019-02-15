@@ -8,6 +8,8 @@ import hudson.Extension;
 import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.jenkinsci.Symbol;
+import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.StaplerRequest;
 
 import hudson.scm.ChangeLogSet;
@@ -136,8 +138,7 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
         }
 
 
-
-      @Extension
+      @Extension @Symbol("globalSlackNotifier")
       public static final class DescriptorImpl extends Descriptor<GlobalSlackNotifier> {
 
         private String successRoom;
@@ -160,12 +161,6 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
         private String abortedMessage;
         private boolean notifyOnAborted;
 
-        private SlackMessage successSlackMessage;
-        private SlackMessage failureSlackMessage;
-        private SlackMessage unstableSlackMessage;
-        private SlackMessage notBuiltSlackMessage;
-        private SlackMessage abortedSlackMessage;
-
         public DescriptorImpl() {
             try{
                 load();
@@ -182,35 +177,27 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
 
             if(result == Result.SUCCESS)
             {
-                return successSlackMessage;
+                return new SlackMessage(successRoom, successMessage, notifyOnSuccess, "good");
             }else if(result == Result.FAILURE){
-                return failureSlackMessage;
+                return new SlackMessage(failureRoom, failureMessage, notifyOnFail, "danger");
             }else if(result == Result.UNSTABLE){
-                return unstableSlackMessage;
+                return new SlackMessage(unstableRoom, unstableMessage, notifyOnUnstable, "warning");
             }else if(result == Result.NOT_BUILT){
-                return notBuiltSlackMessage;
+                return new SlackMessage(notBuiltRoom, notBuiltMessage, notifyOnNotBuilt, "gray");
             }else if(result == Result.ABORTED){
-                return abortedSlackMessage;
+                return new SlackMessage(abortedRoom, abortedMessage, notifyOnAborted, "warning");
             }
             throw new IllegalArgumentException("result not match");
         }
 
-        public void configure(JSONObject formData){
-            successSlackMessage = new SlackMessage(successRoom = formData.getString("successRoom"), successMessage = formData.getString("successMessage"), notifyOnSuccess = formData.getBoolean("notifyOnSuccess"),"good");
-            failureSlackMessage = new SlackMessage(failureRoom = formData.getString("failureRoom"), failureMessage = formData.getString("failureMessage"), notifyOnFail = formData.getBoolean("notifyOnFail"),"danger");
-            unstableSlackMessage = new SlackMessage(unstableRoom = formData.getString("unstableRoom"), unstableMessage = formData.getString("unstableMessage"), notifyOnUnstable =  formData.getBoolean("notifyOnUnstable"),"warning");
-            notBuiltSlackMessage = new SlackMessage(notBuiltRoom = formData.getString("notBuiltRoom"), notBuiltMessage = formData.getString("notBuiltMessage"), notifyOnNotBuilt = formData.getBoolean("notifyOnNotBuilt"),"gray");
-            abortedSlackMessage = new SlackMessage(abortedRoom =formData.getString("abortedRoom"), abortedMessage = formData.getString("abortedMessage"), notifyOnAborted = formData.getBoolean("notifyOnAborted"),"warning");
-
-        }
 
         @Override
-        public boolean configure(StaplerRequest req, JSONObject formData) throws Descriptor.FormException {
-
-            configure(formData);
+        public boolean configure(StaplerRequest req, JSONObject formData) {
+            req.bindJSON(this, formData);
 
             save();
-            return super.configure(req, formData);
+
+            return true;
         }
 
 		/**
@@ -318,5 +305,57 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
 		}
 
 
+		@DataBoundSetter
+        public void setSuccessMessage(String successMessage) { this.successMessage = successMessage; }
+
+		@DataBoundSetter
+        public void setSuccessRoom(String successRoom) { this.successRoom = successRoom; }
+
+        @DataBoundSetter
+        public void setNotifyOnSuccess(boolean notifyOnSuccess) { this.notifyOnSuccess = notifyOnSuccess; }
+
+
+
+        @DataBoundSetter
+        public void setFailureMessage(String failureMessage) { this.failureMessage = failureMessage; }
+
+        @DataBoundSetter
+        public void setFailureRoom(String failureRoom) { this.failureRoom = failureRoom; }
+
+        @DataBoundSetter
+        public void setNotifyOnFail(boolean notifyOnFail) { this.notifyOnFail = notifyOnFail; }
+
+
+
+        @DataBoundSetter
+        public void setUnstableMessage(String unstableMessage) { this.unstableMessage = unstableMessage; }
+
+        @DataBoundSetter
+        public void setUnstableRoom(String unstableRoom) { this.unstableRoom = unstableRoom; }
+
+        @DataBoundSetter
+        public void setNotifyOnUnstable(boolean notifyOnUnstable) { this.notifyOnUnstable = notifyOnUnstable; }
+
+
+
+        @DataBoundSetter
+        public void setNotBuiltMessage(String notBuiltMessage) { this.notBuiltMessage = notBuiltMessage; }
+
+        @DataBoundSetter
+        public void setNotBuiltRoom(String notBuiltRoom) { this.notBuiltRoom = notBuiltRoom; }
+
+        @DataBoundSetter
+        public void setNotifyOnNotBuilt(boolean notifyOnNotBuilt) { this.notifyOnNotBuilt = notifyOnNotBuilt; }
+
+
+
+        @DataBoundSetter
+        public void setAbortedMessage(String abortedMessage) { this.abortedMessage = abortedMessage; }
+
+        @DataBoundSetter
+        public void setAbortedRoom(String abortedRoom) { this.abortedRoom = abortedRoom; }
+
+        @DataBoundSetter
+        public void setNotifyOnAborted(boolean notifyOnAborted) { this.notifyOnAborted = notifyOnAborted; }
       }
 }
