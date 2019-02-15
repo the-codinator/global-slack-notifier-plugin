@@ -1,6 +1,10 @@
+# 1.5 
+
+* add casc(configuration as code) support  by eh-am
+
 # 1.4
 
-* Update Slack Plugin 2.10
+* Update Slack Plugin 2.10 by matejsp
 
 # 1.3
 
