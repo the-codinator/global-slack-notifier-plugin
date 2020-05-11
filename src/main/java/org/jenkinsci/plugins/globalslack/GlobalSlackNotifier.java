@@ -2,11 +2,18 @@ package org.jenkinsci.plugins.globalslack;
 
 import hudson.EnvVars;
 import hudson.Extension;
-import hudson.model.*;
+import hudson.model.Describable;
+import hudson.model.Descriptor;
+import hudson.model.Result;
+import hudson.model.Run;
+import hudson.model.TaskListener;
 import hudson.model.listeners.RunListener;
 import java.util.logging.Logger;
 import jenkins.model.Jenkins;
-import jenkins.plugins.slack.*;
+import jenkins.plugins.slack.CommitInfoChoice;
+import jenkins.plugins.slack.SlackNotifier;
+import jenkins.plugins.slack.SlackService;
+import jenkins.plugins.slack.StandardSlackService;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.Symbol;
@@ -18,7 +25,7 @@ import org.kohsuke.stapler.StaplerRequest;
 public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Describable<GlobalSlackNotifier> {
 
     private static final Logger logger = Logger.getLogger(GlobalSlackNotifier.class.getName());
-
+    private static final String[] messageFilterRegexes = {".*Sanity Check Builds.*"};
 
     @Override
     public void onCompleted(Run<?, ?> run, TaskListener listener) {
@@ -40,6 +47,15 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
 
     public SlackMessage getSlackMessage(Result result) {
         return getDescriptorImpl().getSlackMessage(result);
+    }
+
+    private boolean shouldFilterMessage(String s) {
+        for (String regex : messageFilterRegexes) {
+            if (s.matches(regex)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void publish(Run<?, ?> r, TaskListener listener) {
@@ -84,6 +100,10 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
         room = env.expand(room);
 
         String postText = env.expand(message.getMessage());
+
+        if (!shouldFilterMessage(postText)) {
+            return;
+        }
 
         CommitInfoChoice choice = CommitInfoChoice.forDisplayName("nothing about commits"); //TODO :selectable
         // imcompletely
