@@ -1,31 +1,31 @@
-
 package org.jenkinsci.plugins.globalslack;
 
-public final class SlackMessage{
+public final class SlackMessage {
+
     private String room;
     private String message;
     private boolean enable;
     private String color;
 
-    public SlackMessage( String room,String message,boolean enable,String color )
-    {
+    public SlackMessage(String room, String message, boolean enable, String color) {
         this.room = room;
         this.message = message;
         this.enable = enable;
         this.color = color;
     }
-    public String getRoom(){
+
+    public String getRoom() {
         return room;
     }
 
-    public String getMessage(){
-        if(message == null) {
+    public String getMessage() {
+        if (message == null) {
             return "";
         }
         return message;
     }
 
-    public boolean getEnable(){
+    public boolean getEnable() {
         return enable;
     }
 
@@ -37,7 +37,7 @@ public final class SlackMessage{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return room + "\n" + message + "\n" + enable;
     }
 }
