@@ -10,7 +10,7 @@
     <relativePath/>
   </parent>
   <artifactId>global-slack-notifier</artifactId>
-  <version>1.5.1-SNAPSHOT</version>
+  <version>1.5.4-SNAPSHOT</version>
   <packaging>hpi</packaging>
 
   <properties>
