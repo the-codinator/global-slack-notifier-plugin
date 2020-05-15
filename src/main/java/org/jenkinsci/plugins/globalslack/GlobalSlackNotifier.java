@@ -50,6 +50,9 @@ public class GlobalSlackNotifier extends RunListener<Run<?, ?>> implements Descr
     }
 
     private boolean shouldFilterMessage(String s) {
+        if (s == null) {
+            return false;
+        }
         for (String regex : messageFilterRegexes) {
             if (s.matches(regex)) {
                 return true;
