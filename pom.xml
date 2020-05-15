@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>plugin</artifactId>
     <version>3.37</version>
-    <relativePath />
+    <relativePath/>
   </parent>
   <artifactId>global-slack-notifier</artifactId>
   <version>1.5.1-SNAPSHOT</version>
@@ -38,17 +39,17 @@
     </license>
   </licenses>
 
-   <distributionManagement>
-      <repository>
-        <id>maven.jenkins-ci.org</id>
-        <url>https://repo.jenkins-ci.org/releases</url>
-      </repository>
-    </distributionManagement>
+  <distributionManagement>
+    <repository>
+      <id>maven.jenkins-ci.org</id>
+      <url>https://repo.jenkins-ci.org/releases</url>
+    </repository>
+  </distributionManagement>
 
   <scm>
-    <connection>scm:git:ssh://github.com/jenkinsci/global-slack-notifier-plugin.git</connection>
-    <developerConnection>scm:git:https://github.com/jenkinsci/global-slack-notifier-plugin.git</developerConnection>
-    <url>https://github.com/jenkinsci/global-slack-notifier-plugin</url>
+    <connection>scm:git:ssh://github.com/the-codinator/global-slack-notifier-plugin.git</connection>
+    <developerConnection>scm:git:https://github.com/the-codinator/global-slack-notifier-plugin.git</developerConnection>
+    <url>https://github.com/the-codinator/global-slack-notifier-plugin</url>
     <tag>HEAD</tag>
   </scm>
 
@@ -69,13 +70,7 @@
     </developer>
   </developers>
   -->
-  <!-- Assuming you want to host on @jenkinsci:
-  <scm>
-    <connection>scm:git:git://github.com/jenkinsci/${project.artifactId}-plugin.git</connection>
-    <developerConnection>scm:git:git@github.com:jenkinsci/${project.artifactId}-plugin.git</developerConnection>
-    <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
-  </scm>
-   -->
+
   <repositories>
     <repository>
       <id>repo.jenkins-ci.org</id>
@@ -103,7 +98,7 @@
     </dependency>
   </dependencies>
 
-    <build>
+  <build>
     <!-- To define the plugin version in your parent POM -->
     <pluginManagement>
       <plugins>
